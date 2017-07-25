@@ -1,2 +1,2 @@
-# MIT_polisci
-stuff for MIT political science group 
+# Political Science stuff
+UGA/MIT pol sci
