@@ -32,12 +32,9 @@ def main():
 		controller.authenticate() # password here if set
 		controller.set_options({'ExitNodes':'{US}'})
 		socks.setdefaultproxy(socks.PROXY_TYPE_SOCKS5, '127.0.0.1', 9050)
-		socket.socket = socks.socksocket
-		print('IPv4:', get_ip_address(controller))
-		
+		socket.socket = socks.socksocket	
 		for i in range(10):
-			print('\nbot', i, get_ip_address(controller))
-			controller.signal(Signal.NEWNYM)
+			print('\nbot:', i, '\taddress:', get_ip_address(controller))
 			recs = parse_html(get_html(url_to_scrape))
 			STEP = 0
 			csv_writer(FILE, recs, controller)
@@ -45,7 +42,9 @@ def main():
 			recs = parse_html(get_html(url_to_scrape))
 			STEP = 1
 			csv_writer(FILE, recs,controller)
-			get_new_address(controller)
+			controller.signal(Signal.NEWNYM) # new ip address
+			time.sleep(controller.get_newnym_wait())
+			# get_new_address(controller)
 			
 
 ###########################################################################
@@ -72,9 +71,9 @@ def get_bot_id(file, exists=True):
 	if exists:
 		with open(file, 'r') as f:
 			last_line = f.readlines()[-1].split(',')
-			if last_line[3] == 1:
+			if int(last_line[3]) == 0:
 				bid = int(last_line[0])+1
-			else:
+			elif int(last_line[3]) == 1:
 				bid = int(last_line[0])
 	else:
 		bid = 1
@@ -89,11 +88,11 @@ def get_ip_address(controller):
 		# print(exit, name, address)
 	return address
 
-def get_new_address(controller):
-	print('\tNew IP Available:',controller.is_newnym_available())
-	controller.signal(Signal.NEWNYM)
-	time.sleep(controller.get_newnym_wait())
-	print('\t\tAvailable:',controller.is_newnym_available())
+# def get_new_address(controller):
+# 	print('\tNew IP Available:',controller.is_newnym_available())
+# 	controller.signal(Signal.NEWNYM)
+# 	time.sleep(controller.get_newnym_wait())
+# 	print('\t\tAvailable:',controller.is_newnym_available())
 
 def choose_random_rec(vids):
 	url = vids[random.randint(1,19)][-1]
@@ -103,9 +102,8 @@ def choose_random_rec(vids):
 def csv_writer(file, video_stats,controller):
 	file_exists = os.path.exists(file)
 	bid = get_bot_id(file, file_exists)
-	recid = ['channel', 'title', 'views', 'url']
-	headers = ['botid', 'date', 'time', 
-					   'step', 'ipaddress', 'recid']
+	recid = ['channel','title','views','url']
+	headers = ['botid','date','time','step','ipaddress','recid']
 	headers += ['rec' + str(x) for x in range(1,20)]
 	with open(file, 'a') as f:
 		writer = csv.writer(f, delimiter=',', quoting=csv.QUOTE_MINIMAL)
@@ -131,19 +129,6 @@ def csv_writer(file, video_stats,controller):
 				elif x == 'url':
 					row.append(v[-1])
 			writer.writerow(row)
-
-# def stream_event(controller, event):
-# 	if event.status == StreamStatus.SUCCEEDED and event.circ_id:
-# 		circ = controller.get_circuit(event.circ_id)
-# 		exit_fingerprint = circ.path[-1][0]
-# 		exit_relay = controller.get_network_status(exit_fingerprint)
-# 		print('Exit relay for  connection to %s' % event.target)
-# 		print(' address: %s (%i)' % (exit_relay.address,exit_relay.or_port))
-# 		print(' fingerprint: %s' % exit_relay.fingerprint)
-# 		print(' nickname: %s' % exit_relay.nickname)
-# 		print(' locale: %s' % controller.get_info('ip-to-country/%s' % 
-# 										exit_relay.address, 'unknown'))
-
 
 if __name__ == '__main__':
 	main()
