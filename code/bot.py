@@ -33,7 +33,7 @@ def main():
 		controller.set_options({'ExitNodes':'{US}'})
 		socks.setdefaultproxy(socks.PROXY_TYPE_SOCKS5, '127.0.0.1', 9050)
 		socket.socket = socks.socksocket	
-		for i in range(10):
+		for i in range(100):
 			print('\nbot:', i, '\taddress:', get_ip_address(controller))
 			recs = parse_html(get_html(url_to_scrape))
 			STEP = 0
@@ -43,9 +43,11 @@ def main():
 			STEP = 1
 			csv_writer(FILE, recs,controller)
 			controller.signal(Signal.NEWNYM) # new ip address
-			time.sleep(controller.get_newnym_wait())
-			# get_new_address(controller)
-			
+			time.sleep(10)
+			controller.signal(Signal.NEWNYM) # new ip address
+			time.sleep(10)
+			controller.signal(Signal.NEWNYM) # new ip address
+			time.sleep(10)
 
 ###########################################################################
 
@@ -88,18 +90,12 @@ def get_ip_address(controller):
 		# print(exit, name, address)
 	return address
 
-# def get_new_address(controller):
-# 	print('\tNew IP Available:',controller.is_newnym_available())
-# 	controller.signal(Signal.NEWNYM)
-# 	time.sleep(controller.get_newnym_wait())
-# 	print('\t\tAvailable:',controller.is_newnym_available())
-
 def choose_random_rec(vids):
 	url = vids[random.randint(1,19)][-1]
 	print('\tRandomly chose', url)
 	return url
 
-def csv_writer(file, video_stats,controller):
+def csv_writer(file, video_stats, controller):
 	file_exists = os.path.exists(file)
 	bid = get_bot_id(file, file_exists)
 	recid = ['channel','title','views','url']
