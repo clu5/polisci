@@ -1,5 +1,7 @@
 # Political Science stuff
 
+*(Note) Sometimes IP addresses will be recycled as there are only a fixed number of exit nodes.*
+
 **dependencies**
 ```
 requests
