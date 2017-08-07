@@ -1,5 +1,4 @@
 #!/usr/bin/python
-
 import os, sys, time, random, csv, functools
 import requests
 import socks
@@ -18,8 +17,7 @@ OUTPUT_PATH = os.path.abspath(os.path.join(CUR_PATH, os.pardir))+'/data/'
 FILE = OUTPUT_PATH+'output.csv'
 STEP = 0
 
-##########################################################################
-
+################################################################################
 def main():
 	global STEP
 
@@ -34,8 +32,9 @@ def main():
 		socks.setdefaultproxy(socks.PROXY_TYPE_SOCKS5, '127.0.0.1', 9050)
 		socket.socket = socks.socksocket	
 		for i in range(100):
-			print('\n######################################################')
-			print('\tIteration:',i+1,'\taddress:',get_ip_address(controller))
+			print('\n###############\tIteration:',
+				   i+1,'\taddress:', get_ip_address(controller),
+				   '\t###############')
 			recs_before = parse_html(get_html(url_to_scrape))
 			STEP = 0
 			csv_writer(FILE, recs_before, controller)
@@ -45,8 +44,7 @@ def main():
 			csv_writer(FILE, recs_after, controller)
 			controller.signal(Signal.NEWNYM) # new ip address
 			time.sleep(10)
-
-###########################################################################
+################################################################################
 
 def get_html(url):
 	response = requests.get(url)
