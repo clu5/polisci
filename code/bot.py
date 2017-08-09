@@ -9,8 +9,8 @@ import stem.connection
 from stem import StreamStatus, CircStatus, Signal
 from stem.control import EventType, Controller
 from bs4 import BeautifulSoup
-import logging
-logging.basicConfig()
+# import logging
+# logging.basicConfig()
 
 random.seed(5)
 YOUTUBE = 'https://www.youtube.com'
@@ -33,9 +33,9 @@ def main():
         controller.set_options({'ExitNodes':'{US}'})
         socks.setdefaultproxy(socks.PROXY_TYPE_SOCKS5, '127.0.0.1', 9050)
         socket.socket = socks.socksocket    
-        for i in range(100):
+        for i in range(1000):
             print('\n###############\tIteration:',
-                   i+1,'\taddress:', get_ip_address(controller),
+                   i+1,'\taddress:', get_ip_address(controller, log=True),
                    '\t###############')
             recs_before = parse_html(get_html(url_to_scrape))
             STEP = 0
@@ -83,18 +83,18 @@ def get_bot_id(file, exists=True):
         bid = 1
     return bid
 
-def get_ip_address(controller):
+def get_ip_address(controller, log=False):
     for circuit in controller.get_circuits():
         if circuit.status != CircStatus.BUILT: continue
         exit, name = circuit.path[-1]
         exit_desc = controller.get_network_status(exit, None)
         address = exit_desc.address if exit_desc else 'Unknown'
-        # print(exit, name, address)
+        if log: print(exit, name, address)
     return address
 
 def choose_random_rec(vids):
     # print('\n', len(vids), '\n', vids, '\n')
-    url = vids[random.randint(0,19-1)][-1]
+    url = vids[random.randint(0,len(vids)-1)][-1]
     print('\tRandomly chose', url, '\n')
     return url
 
