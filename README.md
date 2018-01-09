@@ -1,19 +1,8 @@
-# Political Science stuff
+# Bots and webscapers for political science research
 
-*(Note) Sometimes IP addresses will be recycled as there are only a fixed number of exit nodes.*
+### Current projects:
+* Political polarization from video reccomendations
+* Flip-flopping among presidential candidates
 
-**dependencies**
-```
-requests
-beautifulsoup
-socks
-socket
-tor
-stem
-```
-**instructions**
-1. install required packages
-2. `./tor.sh` run tor.sh script and enter password to startup tor
-3. `python bot.py` execute bot (pass url to initialize with different video; else default url used)
+If something's broken (e.g. the website's HTML has been changed) or you have any questions about installing/using the scrapers, feel free to email at **clu@cs.uga.edu**.
 
-if on mac, can you [this](https://kremalicious.com/simple-tor-setup-on-mac-os-x/) to help configure network settings for tor
