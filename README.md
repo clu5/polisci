@@ -1,4 +1,4 @@
-# Bots and webscapers for political science research
+## Bots and webscapers for political science research
 
 ### Current projects:
 * Political polarization from video reccomendations
