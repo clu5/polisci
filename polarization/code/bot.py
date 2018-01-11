@@ -14,9 +14,9 @@ from bs4 import BeautifulSoup
 
 random.seed(5)
 YOUTUBE = 'https://www.youtube.com'
-CUR_PATH = os.path.dirname(os.path.realpath(__file__))
-OUTPUT_PATH = os.path.abspath(os.path.join(CUR_PATH, os.pardir))+'/data/'
-FILE = OUTPUT_PATH+'output.csv'
+CURRENT_PATH = os.path.dirname(os.path.realpath(__file__))
+OUTPUT_PATH  = os.path.abspath(os.path.join(CUR_PATH, os.pardir))+'/data/'
+FILE = OUTPUT_PATH + 'output.csv'
 STEP = 0
 
 ################################################################################
