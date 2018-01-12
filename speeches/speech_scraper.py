@@ -67,7 +67,7 @@ def main():
 
 	for year, election in enumerate(election_links):
 		year *= 4; year += 1960
-		print('############################################################\n')
+		print('##########################################################\n\n')
 		print(year, 'election')
 		soup1 = make_soup(election)
 
@@ -77,6 +77,7 @@ def main():
 		# get links to campaign speechs
 		# usually first link but 2012 Obama is second link for some reason
 		candidate_links = [a.get('href') for a in table1.find_all('a')] 
+		# print(candidate_links)
 
 		for candidate in candidate_links:
 
@@ -92,10 +93,11 @@ def main():
 
 			# List of Lists of speeches
 			# First list is empty for some reason
-			candidate_speeches = [tr.find_all('td', attrs={'class':'listdate'}) 
+			candidate_speeches = [tr.find_all('td', attrs={'class':'listdate'})
 								  for tr in table2.find_all('tr')]
 	
-
+			# print(candidate_speeches)
+			
 			for i, speech in enumerate(candidate_speeches[1:]):
 				i += 1 # because the first list is empty for some reason
 				# ['Barack Obama', 'July 27, 2004, 'Keynote at...]
@@ -108,9 +110,10 @@ def main():
 										for a in candidate_speeches[i][-1]]
 
 				# remove '../' part i.e. first three chars of relative path
-				link_to_speech = urljoin(WEBSITE, speech_relative_path[0][2:]) 
+				link_to_speech = urljoin(WEBSITE, speech_relative_path[0][2:])
 				soup3 = make_soup(link_to_speech)
-				speech_text = soup3.find('span', attrs={'class':'displaytext'}).text
+				speech_text = soup3.find('span', 
+										attrs={'class':'displaytext'}).text
 
 				speech_info = []
 				speech_info.append(current_speech[0])
@@ -127,11 +130,13 @@ def main():
 
 				write_to_json(FILE, all_speeches_info)
 
-				if i == 1: 
-					print(len(candidate_speeches),'speeches for',current_speech[0])
+				name = current_speech[0]
+
+				if i == 1: print(len(candidate_speeches), 'speeches for', name)
 
 				print(i, current_speech[2])
 			
+		print('\n')
 
 if __name__ == '__main__':
     main()
